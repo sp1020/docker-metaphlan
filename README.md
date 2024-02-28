@@ -32,11 +32,20 @@ docker pull sphong/metaphlan
 
 Step 2. Download the database
 
+- The following code download 2023 June version database. 
+  - Latest database will be downloaded without `--index` argument.
+
 ```
-docker run -it --rm -v <your_local_directory>:/database sphong/metaphlan metaphlan --install --bowtie2db /database
+docker run -it --rm -v <your_local_directory>:/database sphong/metaphlan metaphlan --install --index mpa_vJun23_CHOCOPhlAnSGB_202307 --bowtie2db /database
 ```
 (*) Replace <your_local_directory> with the absolute path of the directory to download the MetaPhlAn database.
 
+
+- The recent database can be found in the following link.
+  - http://cmprod1.cibio.unitn.it/biobakery4/metaphlan_databases/
+- Refer the following document for database installation 
+  - https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4
+- Refer the `download_database.sh` as an example script to download MetaPhlAn database.
 
 ### Execute analysis 
 
