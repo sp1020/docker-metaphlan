@@ -9,6 +9,7 @@ Docker image for MetaPhlAn
 - Visit the following link for information on the program.
   - http://segatalab.cibio.unitn.it/tools/metaphlan/index.html
   - https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4
+- MetaPhlAn version: 4.1.0 (latest)
 
 ## Links
 
