@@ -30,10 +30,10 @@ Step 1. Pull the image
 docker pull sphong/metaphlan
 ```
 
-Step 2. Download the dataase 
+Step 2. Download the database
 
 ```
-docker run -it --rm -v <your_local_directory>:/database sphong/metaphlan /bin/bash
+docker run -it --rm -v <your_local_directory>:/database sphong/metaphlan metaphlan --install --bowtie2db /database
 ```
 (*) Replace <your_local_directory> with the absolute path of the directory to download the MetaPhlAn database.
 
