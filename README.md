@@ -26,43 +26,49 @@ You need to download the database only once.
 
 Step 1. Pull the image 
 
-```
+```bash
 docker pull sphong/metaphlan
 ```
 
 Step 2. Download the database
 
-- The following code download 2023 June version database. 
-  - Latest database will be downloaded without `--index` argument.
+- Edit `download_databash.sh` file. 
+  - Specify the local directory (`db_dir`) where the database will be downloaded
+  - Specify the index of the database 
+    - Example: `mpa_vJun23_CHOCOPhlAnSGB_202307`
+    - Search for the latest database in the following URL.
+      - http://cmprod1.cibio.unitn.it/biobakery4/metaphlan_databases/
+- Download the database by executing the script.
 
+```bash
+./download_database.sh
 ```
-docker run -it --rm -v <your_local_directory>:/database sphong/metaphlan metaphlan --install --index mpa_vJun23_CHOCOPhlAnSGB_202307 --bowtie2db /database
-```
-(*) Replace <your_local_directory> with the absolute path of the directory to download the MetaPhlAn database.
-
-
-- The recent database can be found in the following link.
-  - http://cmprod1.cibio.unitn.it/biobakery4/metaphlan_databases/
-- Refer the following document for database installation 
+- For reference, consult the document below.
   - https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4
-- Refer the `download_database.sh` as an example script to download MetaPhlAn database.
 
 ### Execute analysis 
 
+#### Interactive analysis 
+
+Step 1. Run a Docker container
+
+* Mount directories 
+  * MetaPhlAn database (<your_local_directory>)
+  * Working directory with input files (`<your_local_directory>`)
+```bash
+$ docker run -it --rm -v <your_local_directory>:/database -v <your_analysis_directory>:/data sphong/metaphlan /bin/bash
 ```
-$ docker run -it --rm -v <your_local_directory>:/database -v <your_analysis_directory>:/analysis sphong/metaphlan /bin/bash
-```
-⚠ Replace `<your_local_directory>` with the absolute path of the database directoy on your local machine.
 
-⚠ `--bowtie2db /database` argument should be used for command using the MetaPhlAn database.
+Step 2. Execute `metaphlan` commands 
 
-⚠ Place the input file on the local machine (`<your_analysis_directory>`). (In the above script it will be loaded into `/analysis` directory)
+* ⚠ Use `--bowtie2db /database` argument to set up the MetaPhlAn database.
+* ⚠ The working directory will be mounted to `/data`, designated as the Docker container's working directory. 
 
-### Execute analysis - non-root user
+#### Script based analysis 
 
-When the user is not designated, the owner of the result file become `root`. In order to prevent this you have to sent the user information to the container as environmental variable, `USER_ID` and `GROUP_ID`. In case of using redirection (`>`), use `bash` shell script. Refer the following example.
+`MetaPhaAn` can be executed as a command line script. Refer to the following example.  
 
-```
+```bash
 docker run -it --rm \
     -v "/data/database/MetaPhlAn/vJun23:/database" \
     -v "$PWD:/data" \
@@ -71,11 +77,15 @@ docker run -it --rm \
     sphong/metaphlan /bin/bash -c "metaphlan input/SRS014476-Supragingival_plaque.fasta.gz --input_type fasta --bowtie2db /database > profile.txt"
 ```
 
+* In the above example the script was written as a string as the special character for redirection `>` cannot be sent as an input argument, and `/bin/bash -c` command was used to execute the script in the container. 
+* Further, the example shows how to specify a user, ensuring the generated files are owned by the user instead of `root`, which facilitate easier file processing.
+* `USER_ID` and `GROUP_ID` were delivered as environmental argument. (cf. Do not attempt to use `--user`)
+
 ## Prerequisite 
 
 - docker 
 - Over 15Gb memory 
-- Over 5Gb of space (size of the image)
+- Over 7Gb of space (size of the image)
 
 ## License 
 
