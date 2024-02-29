@@ -60,7 +60,7 @@ $ docker run -it --rm -v <your_local_directory>:/database -v <your_analysis_dire
 
 ### Execute analysis - non-root user
 
-When the user is not designated, the owner of the result file become `root`. In order to prevent this you have to sent the user information to the container as environmental variable, `USER_ID` and `GROUP_ID`. The script also be executed within `bash` shell, and the `mpa` environment should be activate first. Refer the following example.
+When the user is not designated, the owner of the result file become `root`. In order to prevent this you have to sent the user information to the container as environmental variable, `USER_ID` and `GROUP_ID`. In case of using redirection (`>`), use `bash` shell script. Refer the following example.
 
 ```
 docker run -it --rm \
@@ -68,10 +68,8 @@ docker run -it --rm \
     -v "$PWD:/data" \
     -e USER_ID=$(id -u)\
     -e GROUP_ID=$(id -g)\
-    sphong/metaphlan /bin/bash -c "source activate mpa; metaphlan input/SRS014476-Supragingival_plaque.fasta.gz --input_type fasta --bowtie2db /database > profile.txt"
+    sphong/metaphlan /bin/bash -c "metaphlan input/SRS014476-Supragingival_plaque.fasta.gz --input_type fasta --bowtie2db /database > profile.txt"
 ```
-
-
 
 ## Prerequisite 
 

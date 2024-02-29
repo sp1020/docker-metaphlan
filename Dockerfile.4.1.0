@@ -1,10 +1,16 @@
+# Load image 
 FROM sphong/miniconda
 
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+# Install MetaPhlAn using Conda 
+RUN conda create -y -n mpa -c conda-forge -c bioconda python=3.7.16 metaphlan=4.1.0
 
-RUN conda create -y -n mpa -c conda-forge -c bioconda python=3.7.16 metaphlan=4.1.0 \
-    && chmod +x /usr/local/bin/entrypoint.sh
-
+# Set the working directory
 WORKDIR /data
 
+# ENTRYPOINT setting
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# CMD
+CMD ["/bin/bash"]

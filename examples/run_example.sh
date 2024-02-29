@@ -21,4 +21,4 @@ docker run -it --rm \
     -v "$PWD:/data" \
     -e USER_ID=$(id -u)\
     -e GROUP_ID=$(id -g)\
-    sphong/metaphlan /bin/bash -c "source activate mpa; metaphlan input/SRS014476-Supragingival_plaque.fasta.gz --input_type fasta --bowtie2db /database > profile.txt"
+    sphong/metaphlan /bin/bash -c "metaphlan input/SRS014476-Supragingival_plaque.fasta.gz --input_type fasta --bowtie2db /database > profile.txt"
