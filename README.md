@@ -18,7 +18,7 @@ Docker image for MetaPhlAn
 
 ## Quick Start 
 
-### Download the MetaPhlAn library 
+### Download the MetaPhlAn database 
 
 The database required to execute MetaPhlAn is not included in the image. You need to download the database before using MetaPhlAn analysis commands. You can download the database onto your local storage and mount it with `-v` option. 
 
@@ -57,6 +57,21 @@ $ docker run -it --rm -v <your_local_directory>:/database -v <your_analysis_dire
 ⚠ `--bowtie2db /database` argument should be used for command using the MetaPhlAn database.
 
 ⚠ Place the input file on the local machine (`<your_analysis_directory>`). (In the above script it will be loaded into `/analysis` directory)
+
+### Execute analysis - non-root user
+
+When the user is not designated, the owner of the result file become `root`. In order to prevent this you have to sent the user information to the container as environmental variable, `USER_ID` and `GROUP_ID`. The script also be executed within `bash` shell, and the `mpa` environment should be activate first. Refer the following example.
+
+```
+docker run -it --rm \
+    -v "/data/database/MetaPhlAn/vJun23:/database" \
+    -v "$PWD:/data" \
+    -e USER_ID=$(id -u)\
+    -e GROUP_ID=$(id -g)\
+    sphong/metaphlan /bin/bash -c "source activate mpa; metaphlan input/SRS014476-Supragingival_plaque.fasta.gz --input_type fasta --bowtie2db /database > profile.txt"
+```
+
+
 
 ## Prerequisite 
 
